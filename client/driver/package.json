@@ -1,0 +1,49 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject",
+    "test": "node ./node_modules/jest/bin/jest.js --watchAll"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  },
+  "dependencies": {
+    "@expo/samples": "2.1.1",
+    "axios": "^0.18.0",
+    "expo": "^32.0.0",
+    "haversine": "^1.1.1",
+    "native-base": "^2.8.0",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native-easy-grid": "^0.2.0",
+    "react-native-elements": "^1.0.0",
+    "react-native-google-places": "^2.5.2",
+    "react-native-maps-directions": "^1.6.0",
+    "react-native-paper": "^2.6.3",
+    "react-native-ui-kitten": "^3.1.2",
+    "react-navigation": "^3.0.9",
+    "react-navigation-material-bottom-tabs": "^1.0.0",
+    "socket.io-client": "^2.2.0"
+  },
+  "devDependencies": {
+    "babel-preset-expo": "^5.0.0",
+    "jest-expo": "^32.0.0"
+  },
+  "private": true,
+  "name": "nec",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "description": ""
+}
