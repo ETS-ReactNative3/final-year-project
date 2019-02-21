@@ -2,8 +2,6 @@
 
 A decentralized application built with Node, React-Native, BigChainDB, Redis and GunDB
 
-The work is still under progress and the database is not yet migrated from MongoDB to BigChainDB
-
 ## Project Setup
 
 Step 1: Download and install redis
@@ -25,3 +23,5 @@ Scan the QR codes of driver and user modules to install the front-end app on mob
 
 ### Disclaimer
 The app was built in 2 days during a hackathon and currently being cleaned and refactored.
+
+The database is being migrated from MongoDB to BigChainDB and GunDB will soon replace Socket.IO
