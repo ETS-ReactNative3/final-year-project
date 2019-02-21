@@ -6,7 +6,11 @@ A decentralized application built with Node, React-Native, BigChainDB, Redis and
 
 Step 1: Download and install redis
 
-Step 2: Start redis server
+Step 2: Start redis server from the downloaded directory using
+
+```
+$ src/redis-server <redis.conf>
+```
 
 Step 3: Run the following commands on the server, driver and user folder which will start the server and the 2 clints and generates 2 QR codes
 
