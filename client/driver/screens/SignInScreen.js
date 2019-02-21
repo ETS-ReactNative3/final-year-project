@@ -18,7 +18,7 @@ import {
   Container
 } from "native-base";
 import { LinearGradient } from "expo";
-const localip = '192.168.43.199'
+const localip = '127.0.0.1'
 export default class SignInScreen extends React.Component {
   constructor(props) {
     super(props);
