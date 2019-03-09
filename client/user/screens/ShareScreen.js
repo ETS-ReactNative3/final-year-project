@@ -17,6 +17,7 @@ import {
   Left
 } from "native-base";
 import List from "../components/ListCard";
+const localip = "192.168.0.104";
 
 export default class ShareScreen extends React.Component {
   state = { request: [], isLoading: true, refreshing: false };
@@ -29,7 +30,7 @@ export default class ShareScreen extends React.Component {
     this.setState({ refreshing: true });
     let token = await AsyncStorage.getItem("jwt");
     console.log(token);
-    let req = await fetch("https://agrigo.herokuapp.com/user/requests", {
+    let req = await fetch(`http://${localip}:3000/user/requests`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -39,6 +40,7 @@ export default class ShareScreen extends React.Component {
     });
 
     let res = await req.json();
+    console.log(res);
     this.setState({ request: res, isLoading: false, refreshing: false });
   }
 

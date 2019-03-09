@@ -12,24 +12,25 @@ import {
 
 export default class List extends Component {
   render() {
-    console.log(this.props.id);
     return (
       <View style={{ height: 80 }}>
         <Content>
           <Card>
-            <CardItem button onPress={() => alert("This is Card Body")}>
+            <CardItem button>
               <Left>
-                <Text>Machinery:{this.props.data.machineryName}</Text>
+                <Text>Machinery:{this.props.data.MachineryName}</Text>
               </Left>
 
               <Right>
                 <Button
-                  onPress={() =>
-                    this.props.navigation.navigate("ViewScreen", {
-                      itemId: this.props.id,
-                      data: this.props.data
-                    })
-                  }
+                  onPress={() => {
+                    if (this.props.data !== undefined) {
+                      this.props.navigation.navigate("ViewScreen", {
+                        itemId: this.props.id,
+                        data: this.props.data
+                      });
+                    }
+                  }}
                   style={{ padding: 10 }}
                 >
                   <Text style={{ color: "white" }}>View Request</Text>

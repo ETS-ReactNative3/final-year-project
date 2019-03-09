@@ -10,8 +10,8 @@ import {
 import MapView, { Marker, AnimatedRegion, Polyline } from "react-native-maps";
 import haversine from "haversine";
 
-const LATITUDE = 12.9778894;
-const LONGITUDE = 77.644986;
+const LATITUDE = 13.1525072;
+const LONGITUDE = 80.1024845;
 const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = 0.009;
 
@@ -20,8 +20,8 @@ class AnimatedMarkers extends React.Component {
     super(props);
 
     this.state = {
-      latitude : LATITUDE,
-      longitude : LONGITUDE,
+      latitude: LATITUDE,
+      longitude: LONGITUDE,
       routeCoordinates: [],
       distanceTravelled: 0,
       prevLatLng: {},
@@ -29,18 +29,63 @@ class AnimatedMarkers extends React.Component {
         latitude: LATITUDE,
         longitude: LONGITUDE
       }),
-      focusedLocation:{
-        latitude:LATITUDE,
-        longitude:LONGITUDE,
-        latitudeDelta:0.0122,
-        longitudeDelta:Dimensions.get("window").width/Dimensions.get("window").height*0.0122
-      },locationChosen:false
+      focusedLocation: {
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
+        latitudeDelta: 0.0122,
+        longitudeDelta:
+          (Dimensions.get("window").width / Dimensions.get("window").height) *
+          0.0122
+      },
+      locationChosen: false
     };
   }
 
-  componentWillMount() {
+  pickLocation = event => {
+    const coords = event.nativeEvent.coordinate;
+    const { latitude, longitude } = coords;
+    this.map.animateToRegion({
+      ...this.state.focusedLocation,
+      latitude: latitude,
+      longitude: longitude
+    });
+    this.setState(state => {
+      return {
+        focusedLocation: {
+          ...state.focusedLocation,
+          latitude: latitude,
+          longitude: longitude
+        },
+        locationChosen: true
+      };
+    });
+  };
+
+  getLocationHandler = event => {
+    navigator.geolocation.getCurrentPosition(pos => {
+      const coords = {
+        nativeEvent: {
+          coordinate: {
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude
+          }
+        }
+      };
+
+      this.pickLocation(coords);
+    });
+  };
+
+  componentDidMount() {
     navigator.geolocation.getCurrentPosition(
-      position => {},
+      position => {
+        this.setState({
+          ...this.state,
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        });
+        console.log(position);
+      },
       error => alert(error.message),
       {
         enableHighAccuracy: true,
@@ -48,36 +93,10 @@ class AnimatedMarkers extends React.Component {
         maximumAge: 1000
       }
     );
-  }
 
-  
-  pickLocation = event =>{
-    const coords = event.nativeEvent.coordinate;
-    const {latitude,longitude} = coords;
-    this.map.animateToRegion({
-      ...this.state.focusedLocation,latitude:latitude,longitude:longitude
-    })
-    this.setState(state=>{return{ focusedLocation:{...state.focusedLocation,latitude:latitude,longitude:longitude},locationChosen:true }})
-    
-  }
-
-  getLocationHandler = (event) =>{
-    navigator.geolocation.getCurrentPosition(pos=>{
-      const coords={
-        nativeEvent:{
-          coordinate:{latitude:pos.coords.latitude,longitude:pos.coords.longitude}
-        }
-      }
-
-      this.pickLocation(coords);
-    })
-  }
-
-  componentDidMount() {
-    
     // this.getLocationHandler();
-    const data = {latitude:LATITUDE, longitude: LONGITUDE};
-    this.props.socket.emit('location', data)
+    const data = { latitude: LATITUDE, longitude: LONGITUDE };
+    this.props.socket.emit("location", data);
     const { coordinate } = this.state;
     this.marker = coordinate;
     this.watchID = navigator.geolocation.watchPosition(
@@ -93,8 +112,8 @@ class AnimatedMarkers extends React.Component {
         if (Platform.OS === "android") {
           if (this.marker) {
             coordinate.timing(newCoordinate).start();
-            console.log("updating")
-            this.props.socket.emit('location', newCoordinate)          
+            console.log("updating");
+            this.props.socket.emit("location", newCoordinate);
           }
         } else {
           coordinate.timing(newCoordinate).start();
@@ -113,7 +132,7 @@ class AnimatedMarkers extends React.Component {
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
   }
-  
+
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID);
   }
@@ -131,9 +150,9 @@ class AnimatedMarkers extends React.Component {
   });
 
   render() {
-    let marker=null;
-    if(this.state.locationChosen){
-      marker = <MapView.Marker coordinate={this.state.focusedLocation}/>
+    let marker = null;
+    if (this.state.locationChosen) {
+      marker = <MapView.Marker coordinate={this.state.focusedLocation} />;
     }
     return (
       <View style={styles.container}>
@@ -145,11 +164,12 @@ class AnimatedMarkers extends React.Component {
           region={this.getMapRegion()}
         >
           <Polyline coordinates={this.state.routeCoordinates} strokeWidth={5} />
-          <Marker.Animated 
+          <Marker.Animated
             ref={marker => {
               this.marker = marker;
             }}
-            coordinate={this.state.coordinate} />
+            coordinate={this.state.coordinate}
+          />
         </MapView>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={[styles.bubble, styles.button]}>

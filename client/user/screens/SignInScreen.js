@@ -18,7 +18,7 @@ import {
   Container
 } from "native-base";
 import { LinearGradient } from "expo";
-const localip = '192.168.43.199'
+const localip = "192.168.0.104";
 export default class SignInScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -70,7 +70,7 @@ export default class SignInScreen extends React.Component {
   _handleSignUp = value => {
     // const value = this.refs.form.getValue();
     // If the form is valid...
-    console.log('trying to register')
+    console.log("trying to register");
     const data = {
       username: this.state.value.username,
       password: this.state.value.password
@@ -78,7 +78,7 @@ export default class SignInScreen extends React.Component {
     console.log(data);
     // Serialize and post the data
     const json = JSON.stringify(data);
-    fetch("https://agrigo.herokuapp.com/api/user/register", {
+    fetch(`http://${localip}:3000/api/user/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

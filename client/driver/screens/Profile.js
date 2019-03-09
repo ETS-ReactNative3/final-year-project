@@ -23,7 +23,9 @@ import {
   Body,
   Thumbnail
 } from "native-base";
+import CheckBox from "react-native-modest-checkbox";
 
+const localip = "192.168.0.104";
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -31,12 +33,17 @@ export default class Profile extends React.Component {
       value: {
         name: "",
         address: "",
-        phoneNo: ""
-      }
+        phoneNo: "",
+        machinery: ""
+      },
+      progress: 10
     };
     this.onValueChangeName = this.onValueChangeName.bind(this);
     this.onValueChangeAddress = this.onValueChangeAddress.bind(this);
     this.onValueChangeNumber = this.onValueChangeNumber.bind(this);
+    this.onValueChangeMachineryName = this.onValueChangeMachineryName.bind(
+      this
+    );
 
     this._handleAdd = this._handleNext.bind(this);
   }
@@ -48,6 +55,7 @@ export default class Profile extends React.Component {
   onValueChangeName(e) {
     let state = { ...this.state };
     state.value.name = e;
+
     this.setState({ state });
   }
 
@@ -63,16 +71,22 @@ export default class Profile extends React.Component {
     this.setState({ state });
   }
 
+  onValueChangeMachineryName(e) {
+    let state = { ...this.state };
+    state.value.machinery = e;
+    this.setState({ state });
+  }
   _handleNext = async value => {
     let token = await AsyncStorage.getItem("jwt");
     const data = {
       name: this.state.value.name,
       address: this.state.value.address,
-      phoneNo: this.state.value.phoneNo
+      phoneNo: this.state.value.phoneNo,
+      machinery: this.state.value.machinery
     };
     console.log(data);
     const json = JSON.stringify(data);
-    fetch("https://agrigo.herokuapp.com/user/profile", {
+    fetch(`http://${localip}:3000/driver/profile`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -87,8 +101,9 @@ export default class Profile extends React.Component {
           alert(res.error);
         } else {
           alert(res.message);
+
           // Redirect to home screen
-          this.props.navigation.navigate("Home");
+          // this.props.navigation.navigate("Home");
         }
       })
       .catch(() => {
@@ -98,11 +113,16 @@ export default class Profile extends React.Component {
   };
 
   render() {
+    const progress = this.state.progress;
+    // console.log(this.state.value);
     return (
       <View style={styles.container}>
         {/* <Button onPress={()=>{this.props.navigation.navigate("AuthLoader");AsyncStorage.clear();}} title="logout" /> */}
         <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          style={{
+            justifyContent: "flex-start",
+            alignItems: "center"
+          }}
         >
           <Thumbnail
             style={{ width: 120, height: 120, borderRadius: 100 }}
@@ -112,78 +132,122 @@ export default class Profile extends React.Component {
                 "https://vignette.wikia.nocookie.net/inclusive-marvel/images/b/b8/Tony-Stark-1.jpg/revision/latest?cb=20140820031842"
             }}
           />
-          <View style={{ marginTop: 15 }}>
+          <View style={{ marginTop: 5 }}>
             <Text style={{ fontSize: 25 }}>Stark</Text>
           </View>
-          <View>
-            <View
-              style={{
-                height: 7,
-                borderRadius: 20,
-                marginTop: 15,
-                width: Dimensions.get("window").width - 60,
-                backgroundColor: "#ffa700"
-              }}
-            />
-            <Text style={{ textAlign: "right" }}>10%</Text>
-          </View>
+        </View>
+        <View>
+          <View
+            style={{
+              height: 7,
+              borderRadius: 20,
+              marginTop: 0,
+              width: progress,
+              backgroundColor: "#ffa700"
+            }}
+          />
+          <Text style={{ textAlign: "left" }}>10%</Text>
         </View>
         <ScrollView style={{ flex: 2 }}>
           <View style={{ flex: 1 }}>
             <Card>
               <List>
                 <ListItem>
-                  <Text>Simon Mignolet</Text>
+                  <Item>
+                    <Input
+                      onEndEditing={() => {
+                        this.setState({ ...this.state, progress: 100 });
+                      }}
+                      onResponderStart={() => {
+                        this.setState({
+                          ...this.state,
+                          progress: progress - 100
+                        });
+                      }}
+                      onChangeText={this.onValueChangeName}
+                      placeholder="Name"
+                    />
+                  </Item>
                 </ListItem>
                 <ListItem>
-                  <Text>Nathaniel Clyne</Text>
+                  <Item>
+                    <Input
+                      onEndEditing={() => {
+                        this.setState({ ...this.state, progress: 100 });
+                      }}
+                      onResponderStart={() => {
+                        this.setState({
+                          ...this.state,
+                          progress: progress - 100
+                        });
+                      }}
+                      onChangeText={this.onValueChangeAddress}
+                      placeholder="Enter Address"
+                    />
+                  </Item>
                 </ListItem>
                 <ListItem>
-                  <Text>Dejan Lovren</Text>
+                  <Item>
+                    <Input
+                      keyboardType="number-pad"
+                      maxLength={10}
+                      onEndEditing={() => {
+                        this.setState({ ...this.state, progress: 100 });
+                      }}
+                      onResponderStart={() => {
+                        this.setState({
+                          ...this.state,
+                          progress: progress - 100
+                        });
+                      }}
+                      onChangeText={this.onValueChangeNumber}
+                      placeholder="Enter PhoneNo"
+                    />
+                  </Item>
                 </ListItem>
                 <ListItem>
-                  <Text>Simon Mignolet</Text>
-                </ListItem>
-                <ListItem>
-                  <Text>Nathaniel Clyne</Text>
-                </ListItem>
-                <ListItem>
-                  <Text>Dejan Lovren</Text>
-                </ListItem>
-                <ListItem>
-                  <Text>Simon Mignolet</Text>
-                </ListItem>
-                <ListItem>
-                  <Text>Nathaniel Clyne</Text>
-                </ListItem>
-                <ListItem>
-                  <Text>Dejan Lovren</Text>
-                </ListItem>
-                <ListItem>
-                  <Text>Simon Mignolet</Text>
-                </ListItem>
-                <ListItem>
-                  <Text>Nathaniel Clyne</Text>
-                </ListItem>
-                <ListItem>
-                  <Text>Dejan Lovren</Text>
+                  <Item>
+                    <Input
+                      onChangeText={this.onValueChangeMachineryName}
+                      placeholder="Enter Machinery Name"
+                    />
+                  </Item>
                 </ListItem>
               </List>
             </Card>
           </View>
         </ScrollView>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#ffa700",
-            height: 40,
-            elevation: 3,
-            marginVertical: 20,
-            justifyContent: "center",
-            alignItems: "center"
-          }}
-        >
-          <Text>Logout</Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+          <TouchableOpacity
+            onPress={this._handleNext}
+            style={{
+              flex: 1,
+              marginHorizontal: 5,
+              backgroundColor: "#ffa700",
+              height: 40,
+              elevation: 3,
+              marginVertical: 20,
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <Text>Save Changes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              marginHorizontal: 5,
+              backgroundColor: "#ffa700",
+              height: 40,
+              elevation: 3,
+              marginVertical: 20,
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <Text>Logout</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }

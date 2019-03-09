@@ -43,14 +43,22 @@ const AppTabNavigator = createBottomTabNavigator(
       navigationOptions: {
         tabBarIcon: (
           <Image
-              style={{ width: 90, height: 100, marginBottom:40 }}
-              source={require("../assets/images/logo.png")}
-            />
+            style={{ width: 90, height: 100, marginBottom: 40 }}
+            source={require("../assets/images/logo.png")}
+          />
         )
       }
     },
     Ride: {
       screen: RideComplete,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => {
+          return <Entypo color="#f7b733" size={24} name="user" />;
+        }
+      }
+    },
+    ShareScreen: {
+      screen: ShareScreen,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => {
           return <Entypo color="#f7b733" size={24} name="user" />;
